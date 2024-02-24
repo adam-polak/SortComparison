@@ -6,4 +6,5 @@
  *
  */
 module sort {
+	requires java.desktop;
 }

@@ -3,6 +3,7 @@ package sort;
 import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
 
 public class MyFrame extends JFrame {
 
@@ -36,6 +37,31 @@ public class MyFrame extends JFrame {
 						sortButtonActionPerformed(e);
 					}
 				});
+		
+		GroupLayout layout = new GroupLayout(getContentPane());
+		this.setLayout(layout);
+		
+		layout.setAutoCreateGaps(true);
+		layout.setAutoCreateContainerGaps(true);
+		
+		GroupLayout.SequentialGroup xGroup  = layout.createSequentialGroup();
+		xGroup.addGroup(layout.createParallelGroup())
+			.addComponent(sort);
+		xGroup.addGroup(layout.createParallelGroup())
+			.addComponent(randomize);
+		layout.setHorizontalGroup(xGroup);
+		
+		GroupLayout.SequentialGroup yGroup = layout.createSequentialGroup();
+		yGroup.addGroup(layout.createParallelGroup(Alignment.BASELINE))
+			.addComponent(sort);
+		yGroup.addGroup(layout.createParallelGroup(Alignment.BASELINE))
+			.addComponent(randomize);
+		layout.setVerticalGroup(yGroup);
+		
+		this.setSize(300,300);
+		this.setResizable(true);
+		this.setVisible(true);
+		
 	}
 	
 	private void randomizeButtonActionPerformed(ActionEvent e) {

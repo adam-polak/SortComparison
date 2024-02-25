@@ -17,11 +17,22 @@ public class Number {
 		randomGen();
 	}
 	
+	private void showList() {
+		System.out.println("-------------------------------------------------");
+		Node check = dummy.next;
+		while(check != null) {
+			System.out.println(check.num);
+			check = check.next;
+		}
+		System.out.println("-------------------------------------------------");
+	}
+	
 	/*
 	 * Creates a list of 100 random numbers between (0, 1,000]
 	 */
 	public void randomGen() {
 		int random;
+		dummy.next = null;
 		Node prev = dummy.next;
 		Node add;
 		for(int i = 0; i < 100; i++) {
@@ -30,6 +41,8 @@ public class Number {
 			dummy.next = add;
 			prev = add;
 		}
+		
+		showList();
 	}
 	
 	/*
@@ -60,6 +73,8 @@ public class Number {
 			}
 			if(!found) find.next = temp;
 		}
+		
+		showList();
 	}
 
 }

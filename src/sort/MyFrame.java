@@ -44,19 +44,17 @@ public class MyFrame extends JFrame {
 		layout.setAutoCreateGaps(true);
 		layout.setAutoCreateContainerGaps(true);
 		
-		GroupLayout.SequentialGroup xGroup  = layout.createSequentialGroup();
-		xGroup.addGroup(layout.createParallelGroup())
-			.addComponent(sort);
-		xGroup.addGroup(layout.createParallelGroup())
-			.addComponent(randomize);
-		layout.setHorizontalGroup(xGroup);
+		GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
+		hGroup.addGroup(layout.createParallelGroup()
+	            .addComponent(sort, 120, 120, 120));
+		hGroup.addGroup(layout.createParallelGroup()
+				.addComponent(randomize, 120, 120, 120));
+		layout.setHorizontalGroup(hGroup);
 		
-		GroupLayout.SequentialGroup yGroup = layout.createSequentialGroup();
-		yGroup.addGroup(layout.createParallelGroup(Alignment.BASELINE))
-			.addComponent(sort);
-		yGroup.addGroup(layout.createParallelGroup(Alignment.BASELINE))
-			.addComponent(randomize);
-		layout.setVerticalGroup(yGroup);
+		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
+		vGroup.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+				.addComponent(sort).addComponent(randomize));
+		layout.setVerticalGroup(vGroup);
 		
 		this.setSize(300,300);
 		this.setResizable(true);

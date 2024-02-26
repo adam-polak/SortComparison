@@ -2,6 +2,8 @@ package sort;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.*;
 
 import javax.swing.*;
@@ -12,18 +14,36 @@ public class MyFrame extends JFrame {
 
 	private static final long serialVersionUID = -8849683656483583890L;
 	
+	private class BPanel extends JPanel {
+		
+		BPanel() {
+			this.setPreferredSize(new Dimension(200, 200));
+		}
+		
+		public void paint(Graphics g) {
+			Graphics2D g2D = (Graphics2D) g;
+			g2D.setColor(Color.darkGray);
+			for(int i = 0; i < heights.length; i++) {
+				g2D.fillRect(i + 70, 0, 1, heights[i]);
+			}
+		}
+	}
+	
 	private JButton randomize;
 	private JButton sort;
 	private Number instance;
-	private JPanel[] bar;
+	private JPanel frame;
+	private JPanel buttons;
+	private BPanel bars;
 	private int[] heights;
 	
 	public MyFrame() {
-		bar = new JPanel[100];
+		frame = new JPanel();
+		buttons = new JPanel();
 		heights = new int[100];
 		instance = new Number();
 		setHeights();
-		initBars();
+		bars = new BPanel();
 		initComponents();
 	}
 	
@@ -48,56 +68,55 @@ public class MyFrame extends JFrame {
 		
 		changeLayout();
 		
-		this.setSize(1000,1000);
+		this.setSize(300,600);
 		this.setResizable(true);
 		this.setVisible(true);
 		
 	}
 	
 	private void changeLayout() {
-		GroupLayout layout = new GroupLayout(getContentPane());
-		this.setLayout(layout);
 		
-		layout.setAutoCreateGaps(true);
-		layout.setAutoCreateContainerGaps(true);
+		//Button Frame Layout
+		GroupLayout buttonLayout = new GroupLayout(buttons);
+		buttons.setLayout(buttonLayout);
 		
-		GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
-		GroupLayout.ParallelGroup hBars = setBarsH(layout);
+		buttonLayout.setAutoCreateGaps(true);
+		buttonLayout.setAutoCreateContainerGaps(true);
 		
-		hGroup.addGroup(hBars
+		GroupLayout.SequentialGroup hGroup = buttonLayout.createSequentialGroup();
+		hGroup.addGroup(buttonLayout.createParallelGroup()
 	            .addComponent(sort, 120, 120, 120));
-		hGroup.addGroup(layout.createParallelGroup()
+		hGroup.addGroup(buttonLayout.createParallelGroup()
 				.addComponent(randomize, 120, 120, 120));
-		layout.setHorizontalGroup(hGroup);
+		buttonLayout.setHorizontalGroup(hGroup);
 		
-		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
-		GroupLayout.ParallelGroup vBars = setBarsV(layout);
-		
-		vGroup.addGroup(vBars);
-		vGroup.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+		GroupLayout.SequentialGroup vGroup = buttonLayout.createSequentialGroup();
+		vGroup.addGroup(buttonLayout.createParallelGroup(Alignment.BASELINE)
 				.addComponent(sort).addComponent(randomize));
-		layout.setVerticalGroup(vGroup);
-	}
-	
-	private void initBars() {
-		JPanel bar;
-		bar = new JPanel();
-		bar.setBackground(Color.red);
-		bar.setSize(new Dimension(5, heights[0]));
-		bar.setPreferredSize(getSize());
-		this.bar[0] = bar;
-//		boolean everyOther = true;
-//		for(int i = 0; i < this.bar.length; i++) {
-//			bar = new JPanel();
-//			if(everyOther) {
-//				bar.setBackground(Color.red);
-//				everyOther = false;
-//			} else {
-//				bar.setBackground(Color.blue);
-//				everyOther = true;
-//			}
-//			this.bar[i] = bar;
-//		}
+		buttonLayout.setVerticalGroup(vGroup);
+		
+		//Root Frame Layout
+		GroupLayout rootLayout = new GroupLayout(frame);
+		frame.setLayout(rootLayout);
+		
+		rootLayout.setAutoCreateGaps(true);
+		rootLayout.setAutoCreateContainerGaps(true);
+		
+		hGroup = rootLayout.createSequentialGroup();
+		hGroup.addGroup(rootLayout.createParallelGroup()
+				.addComponent(bars)
+				.addComponent(buttons));
+		rootLayout.setHorizontalGroup(hGroup);
+		
+		vGroup = rootLayout.createSequentialGroup();
+		vGroup.addGroup(rootLayout.createParallelGroup(Alignment.BASELINE)
+				.addComponent(bars));
+		vGroup.addGroup(rootLayout.createParallelGroup(Alignment.BASELINE)
+				.addComponent(buttons));
+		rootLayout.setVerticalGroup(vGroup);
+		
+		this.add(frame);
+		
 	}
 	
 	private void setHeights() {
@@ -105,42 +124,22 @@ public class MyFrame extends JFrame {
 		int height = 0;
 		
 		for(int i = 0; i < this.heights.length; i++) {
-			height = (num / 2) + 10;
+			height = num / 2;
 			heights[i] = height;
 			num = instance.getNextNum();
 		}
 	}
 	
-	private ParallelGroup setBarsH(GroupLayout layout) {
-		GroupLayout.ParallelGroup bars = layout.createParallelGroup();
-		setHeights();
-		bars.addComponent(bar[0], 10, 10, heights[0]);
-//		for(int i = 0; i < heights.length; i++) {
-//			bars.addComponent(bar[i], 10, 10, heights[i]);
-//		}
-		return bars;
-	}
-	
-	private ParallelGroup setBarsV(GroupLayout layout) {
-		GroupLayout.ParallelGroup bars = layout.createParallelGroup(Alignment.BASELINE);
-		setHeights();
-		bars.addComponent(bar[0], 10, 10, heights[0]);
-//		for(int i = 0; i < heights.length; i++) {
-//			bars.addComponent(bar[i], 10, 10, heights[i]);
-//		}
-		return bars;
-	}
-	
 	private void randomizeButtonActionPerformed(ActionEvent e) {
+		instance.randomGen();
 		setHeights();
 		changeLayout();
-		instance.randomGen();
 	}
 	
 	private void sortButtonActionPerformed(ActionEvent e) {
+		instance.insertionSort();
 		setHeights();
 		changeLayout();
-		instance.insertionSort();
 	}
 	
 	

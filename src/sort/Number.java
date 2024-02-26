@@ -11,7 +11,21 @@ public class Number {
 		}
 	}
 	
-	Node dummy = new Node(-1, null);
+	private Node dummy = new Node(-1, null);
+	private Node nextValue = dummy;
+	
+	/*
+	 * Returns the value of the next node in the list.
+	 */
+	public int getNextNum() {
+		if(nextValue != null && nextValue.next != null) {
+			nextValue = nextValue.next;
+			return nextValue.num;
+		} else {
+			nextValue = dummy;
+			return -1;
+		}
+	}
 	
 	public Number() {
 		randomGen();

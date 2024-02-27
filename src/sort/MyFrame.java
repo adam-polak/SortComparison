@@ -23,8 +23,12 @@ public class MyFrame extends JFrame {
 		public void paint(Graphics g) {
 			Graphics2D g2D = (Graphics2D) g;
 			g2D.setColor(Color.darkGray);
-			for(int i = 0; i < heights.length; i++) {
-				g2D.fillRect(i + 70, 0, 1, heights[i]);
+			int baseLine = 200;
+			int center = 80;
+			int count = 0;
+			for(int i = heights.length - 1; i >= 0; i--) {
+				g2D.drawLine(count + center, heights[i], count + center, baseLine);
+				count++;
 			}
 		}
 	}
@@ -45,6 +49,9 @@ public class MyFrame extends JFrame {
 		setHeights();
 		bars = new BPanel();
 		initComponents();
+		this.setSize(280,200);
+		this.setResizable(false);
+		this.setVisible(true);
 	}
 	
 	private void initComponents() {
@@ -67,11 +74,6 @@ public class MyFrame extends JFrame {
 				});
 		
 		changeLayout();
-		
-		this.setSize(300,600);
-		this.setResizable(true);
-		this.setVisible(true);
-		
 	}
 	
 	private void changeLayout() {
@@ -124,7 +126,7 @@ public class MyFrame extends JFrame {
 		int height = 0;
 		
 		for(int i = 0; i < this.heights.length; i++) {
-			height = num / 2;
+			height = num / 10;
 			heights[i] = height;
 			num = instance.getNextNum();
 		}

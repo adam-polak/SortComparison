@@ -2,7 +2,7 @@ package sort;
 
 public class Number {
 	
-	private class Node {
+	public class Node {
 		int num;
 		Node next;
 		Node(int n, Node x) {
@@ -31,7 +31,7 @@ public class Number {
 		randomGen();
 	}
 	
-	private void showList() {
+	public void showList() {
 		System.out.println("-------------------------------------------------");
 		Node check = dummy.next;
 		while(check != null) {
@@ -57,6 +57,40 @@ public class Number {
 		}
 		
 		showList();
+	}
+	
+	public Node getFirst() {
+		return dummy.next;
+	}
+	
+	public Node insert(Node x) {
+		if(x == null || (x == dummy.next && x.next == null)) return null;
+		
+		Node current = x.next;
+		Node temp = current;
+		Node find = dummy;
+		current = current.next;
+		temp.next = null;
+		boolean found = false;
+		Node lag = find;
+		int count = 0;
+		
+		found = false;
+		while(find.next != null || count != 2) {
+			if(temp.num <= find.next.num) {
+				temp.next = find.next;
+				find.next = temp;
+				found = true;
+				break;
+			}
+			System.out.println(find.num);
+			lag = find;
+			find = find.next;
+			count++;
+		}
+		if(!found) find.next = temp;
+		
+		return current;
 	}
 	
 	/*

@@ -10,14 +10,19 @@ import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout.ParallelGroup;
 
+import sort.Number.Node;
+
 public class MyFrame extends JFrame {
 
 	private static final long serialVersionUID = -8849683656483583890L;
 	
 	private class BPanel extends JPanel {
 		
+		private boolean[] mark = new boolean[100];
+		
 		BPanel() {
-			this.setPreferredSize(new Dimension(200, 200));
+			setSize(new Dimension(200, 200));
+			setPreferredSize(new Dimension(200, 200));
 		}
 		
 		public void paint(Graphics g) {
@@ -132,6 +137,18 @@ public class MyFrame extends JFrame {
 		}
 	}
 	
+	public void mark(Node x) {
+		if(x.next == null) {
+			bars.mark[99] = true;
+		} else {
+			for(int i = 0; i < heights.length - 1; i++) {
+				if(heights[i] == x.num && heights[i + 1] == x.next.num) {
+					bars.mark[i] = true;
+				}
+			}
+		}
+	}
+	
 	private void randomizeButtonActionPerformed(ActionEvent e) {
 		instance.randomGen();
 		setHeights();
@@ -139,7 +156,11 @@ public class MyFrame extends JFrame {
 	}
 	
 	private void sortButtonActionPerformed(ActionEvent e) {
-		instance.insertionSort();
+		Node x = instance.getFirst();
+		while(x != null) {
+			x = instance.insert(x);
+		}
+		instance.showList();
 		setHeights();
 		changeLayout();
 	}

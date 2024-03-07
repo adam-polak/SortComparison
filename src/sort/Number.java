@@ -64,29 +64,26 @@ public class Number {
 	}
 	
 	public Node insert(Node x) {
-		if(x == null || (x == dummy.next && x.next == null)) return null;
-		
-		Node current = x.next;
+		Node lag = x;
+		Node current = lag == null ? null : lag.next;
 		Node temp = current;
-		Node find = dummy;
+		if(lag != null) lag.next = null;
+		Node find;
+		boolean found = false;
+		temp = current;
 		current = current.next;
 		temp.next = null;
-		boolean found = false;
-		Node lag = find;
-		int count = 0;
 		
+		find = dummy;
 		found = false;
-		while(find.next != null || count != 2) {
+		while(find.next != null) {
 			if(temp.num <= find.next.num) {
 				temp.next = find.next;
 				find.next = temp;
 				found = true;
 				break;
 			}
-			System.out.println(find.num);
-			lag = find;
 			find = find.next;
-			count++;
 		}
 		if(!found) find.next = temp;
 		

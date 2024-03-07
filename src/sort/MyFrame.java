@@ -32,6 +32,8 @@ public class MyFrame extends JFrame {
 			int center = 80;
 			int count = 0;
 			for(int i = heights.length - 1; i >= 0; i--) {
+				if(mark[i]) g2D.setColor(Color.red);
+				else g2D.setColor(Color.darkGray);
 				g2D.drawLine(count + center, heights[i], count + center, baseLine);
 				count++;
 			}
@@ -157,12 +159,14 @@ public class MyFrame extends JFrame {
 	
 	private void sortButtonActionPerformed(ActionEvent e) {
 		Node x = instance.getFirst();
+		
 		while(x != null) {
 			x = instance.insert(x);
+			if(x != null) mark(x);
+			setHeights();
+			changeLayout();
 		}
 		instance.showList();
-		setHeights();
-		changeLayout();
 	}
 	
 	

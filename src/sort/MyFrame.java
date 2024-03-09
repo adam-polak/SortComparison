@@ -8,9 +8,6 @@ import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.GroupLayout.ParallelGroup;
-
-import sort.Number.Node;
 
 public class MyFrame extends JFrame {
 
@@ -18,7 +15,7 @@ public class MyFrame extends JFrame {
 	
 	private class BPanel extends JPanel {
 		
-		private boolean[] mark = new boolean[100];
+		//private boolean[] mark = new boolean[100];
 		
 		BPanel() {
 			setSize(new Dimension(200, 200));
@@ -26,32 +23,39 @@ public class MyFrame extends JFrame {
 		}
 		
 		public void paint(Graphics g) {
+			Number.Node val = list.getNext();
 			Graphics2D g2D = (Graphics2D) g;
 			g2D.setColor(Color.darkGray);
 			int baseLine = 200;
 			int center = 80;
-			int count = 0;
-			for(int i = heights.length - 1; i >= 0; i--) {
-				g2D.drawLine(count + center, heights[i], count + center, baseLine);
-				count++;
+			int count = 99;
+			int height = 0;
+			while(val != null) {
+				g2D.setColor(Color.red);
+				g2D.drawLine(count + center, 0, count + center, baseLine);
+				if(val.red) g2D.setColor(Color.red);
+				else g2D.setColor(Color.darkGray);
+				val.red = false;
+				height = val.num / 10;
+				g2D.drawLine(count + center, height, count + center, baseLine);
+				count--;
+				val = list.getNext();
 			}
+			MyFrame.this.changeLayout();
 		}
 	}
 	
 	private JButton randomize;
 	private JButton sort;
-	private Number instance;
 	private JPanel frame;
 	private JPanel buttons;
 	private BPanel bars;
-	private int[] heights;
+	private Number list;
 	
 	public MyFrame() {
 		frame = new JPanel();
 		buttons = new JPanel();
-		heights = new int[100];
-		instance = new Number();
-		setHeights();
+		list = new Number();
 		bars = new BPanel();
 		initComponents();
 		this.setSize(280,200);
@@ -126,43 +130,136 @@ public class MyFrame extends JFrame {
 		
 	}
 	
-	private void setHeights() {
-		int num = instance.getNextNum();
-		int height = 0;
-		
-		for(int i = 0; i < this.heights.length; i++) {
-			height = num / 10;
-			heights[i] = height;
-			num = instance.getNextNum();
-		}
-	}
-	
-	public void mark(Node x) {
-		if(x.next == null) {
-			bars.mark[99] = true;
-		} else {
-			for(int i = 0; i < heights.length - 1; i++) {
-				if(heights[i] == x.num && heights[i + 1] == x.next.num) {
-					bars.mark[i] = true;
-				}
-			}
-		}
-	}
-	
 	private void randomizeButtonActionPerformed(ActionEvent e) {
-		instance.randomGen();
-		setHeights();
+		list.randomGen();
+		//setHeights();
 		changeLayout();
 	}
 	
 	private void sortButtonActionPerformed(ActionEvent e) {
-		Node x = instance.getFirst();
-		while(x != null) {
-			x = instance.insert(x);
-		}
-		instance.showList();
-		setHeights();
+		list.insertionSort();
+		//setHeights();
 		changeLayout();
+	}
+	
+	private class Number {
+		
+		public class Node {
+			int num;
+			Node next;
+			boolean red = false;
+			Node(int n, Node x) {
+				num = n;
+				next = x;
+			}
+		}
+		
+		private Node dummy = new Node(-1, null);
+		private Node nextValue = dummy;
+		private Node nextNode = dummy;
+		
+		/*
+		 * Returns the value of the next node in the list.
+		 */
+		public int getNextNum() {
+			if(nextValue != null && nextValue.next != null) {
+				nextValue = nextValue.next;
+				return nextValue.num;
+			} else {
+				nextValue = dummy;
+				return -1;
+			}
+		}
+		
+		public Node getNext() {
+			if(nextNode != null && nextNode.next != null) {
+				nextNode = nextNode.next;
+				return nextNode;
+			} else {
+				nextNode = dummy;
+				return null;
+			}
+		}
+		
+		public Number() {
+			randomGen();
+		}
+		
+		public void showList() {
+			System.out.println("-------------------------------------------------");
+			Node check = dummy.next;
+			while(check != null) {
+				System.out.println(check.num);
+				check = check.next;
+			}
+			System.out.println("-------------------------------------------------");
+		}
+		
+		/*
+		 * Creates a list of 100 random numbers between (0, 1,000]
+		 */
+		private void randomGen() {
+			int random;
+			dummy.next = null;
+			Node prev = dummy.next;
+			Node add;
+			for(int i = 0; i < 100; i++) {
+				random = (int)(Math.random() * 1000) + 1;
+				add = new Node(random, prev);
+				dummy.next = add;
+				prev = add;
+			}
+			
+			showList();
+		}
+		
+		/*
+		 * Uses insertion sort to sort the 1000 numbers;
+		 */
+		private void insertionSort() {
+			Node lag = dummy.next;
+			Node current = lag == null ? null : lag.next;
+			Node temp = current;
+			if(lag != null) lag.next = null;
+			Node find;
+			boolean found = false;
+			int delay = 0;
+			while(current != null) {
+				temp = current;
+				current = current.next;
+				temp.next = null;
+				
+				find = dummy;
+				found = false;
+				temp.red = true;
+				while(find.next != null) {
+					find.red = true;
+					if(temp.num <= find.next.num) {
+						temp.next = find.next;
+						find.next = temp;
+						found = true;
+						find.red = true;
+						MyFrame.this.bars.paint(MyFrame.this.bars.getGraphics());
+						while(delay < 100000) {
+							System.out.println(delay);
+							delay++;
+						}
+						break;
+					}
+					while(delay < 100) {
+						System.out.println(delay);
+						delay++;
+					}
+					delay = 0;
+					MyFrame.this.bars.paint(MyFrame.this.bars.getGraphics());
+					find = find.next;
+				}
+				MyFrame.this.bars.paint(MyFrame.this.bars.getGraphics());
+				if(!found) find.next = temp;
+			}
+			
+			showList();
+		}
 	}
 	
 	

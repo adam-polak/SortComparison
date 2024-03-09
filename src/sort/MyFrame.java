@@ -136,7 +136,6 @@ public class MyFrame extends JFrame {
 	
 	private void sortButtonActionPerformed(ActionEvent e) {
 		list.insertionSort();
-		//setHeights();
 		changeLayout();
 	}
 	

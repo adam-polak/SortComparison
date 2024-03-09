@@ -15,8 +15,6 @@ public class MyFrame extends JFrame {
 	
 	private class BPanel extends JPanel {
 		
-		//private boolean[] mark = new boolean[100];
-		
 		BPanel() {
 			setSize(new Dimension(200, 200));
 			setPreferredSize(new Dimension(200, 200));

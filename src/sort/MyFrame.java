@@ -23,16 +23,16 @@ public class MyFrame extends JFrame {
 		public void paint(Graphics g) {
 			Number.Node val = list.getNext();
 			Graphics2D g2D = (Graphics2D) g;
-			g2D.setColor(Color.darkGray);
+			g2D.setColor(Color.white);
 			int baseLine = 200;
 			int center = 80;
 			int count = 99;
 			int height = 0;
 			while(val != null) {
-				g2D.setColor(Color.red);
+				g2D.setColor(Color.black);
 				g2D.drawLine(count + center, 0, count + center, baseLine);
-				if(val.red) g2D.setColor(Color.red);
-				else g2D.setColor(Color.darkGray);
+				if(val.red) g2D.setColor(Color.black);
+				else g2D.setColor(Color.white);
 				val.red = false;
 				height = val.num / 10;
 				g2D.drawLine(count + center, height, count + center, baseLine);
@@ -56,6 +56,7 @@ public class MyFrame extends JFrame {
 		list = new Number();
 		bars = new BPanel();
 		initComponents();
+		this.setBackground(Color.white);
 		this.setSize(280,200);
 		this.setResizable(false);
 		this.setVisible(true);
